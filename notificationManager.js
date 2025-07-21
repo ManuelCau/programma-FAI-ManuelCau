@@ -1,13 +1,13 @@
 export function createNotificationManager() {
   let notifications = [];
   let subscribers = [];
-  let config = {};
+  let config = { fetchUrl: "", updateUrl: "", createUrl: "" };
 
-  function get() {
-    return Promise.resolve(notifications);
+  async function get() {
+    return notifications;
   }
 
-  function send({ title, message }) {
+  async function send({ title, message }) {
     const input = {
       data: { title, message },
       id: Date.now(),
@@ -16,24 +16,33 @@ export function createNotificationManager() {
     };
     notifications.push(input);
     subscribers.forEach((fn) => fn(input));
-    return Promise.resolve(input);
+    return input;
   }
 
-  function setRead(id) {
+  async function setRead(id) {
     const note = notifications.find((n) => n.id === id);
     if (note) {
       note.readAt = Date.now();
     }
-    return Promise.resolve();
+    return;
   }
 
   function subscribe(callback) {
     subscribers.push(callback);
+
+    const welcomeNote = {
+      data: { title: "Welcome", message: "You are a new subscriber" },
+      id: Date.now(),
+      sender: "Manuel",
+      createdAt: Date.now(),
+    };
+    callback(welcomeNote);
   }
 
-  function setConfig() {
-    return config
+  async function setConfig(newConfig) {
+    config = { ...config, ...newConfig };
+    return;
   }
 
-  return { get, send, subscribe, setRead, setConfig, setConfig };
+  return { get, send, subscribe, setRead, setConfig };
 }

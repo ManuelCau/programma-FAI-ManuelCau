@@ -8,15 +8,20 @@ describe("subscribe()", () => {
     notifications = createNotificationManager();
   });
 
-  /* it("subscribe accept callback", () => {
+  it("subscribe accept callback", async () => {
     const callback = vi.fn();
-    expect(() => notifications.subscribe(callback)).toHaveBeenCalled();
-  }); */
+    const input = { title: "Welcome", message: "Hello!" };
 
-  it("a callback is called after subscribes", async () => {
+    notifications.subscribe(callback);
+    await notifications.send(input);
+    expect(callback).toHaveBeenCalled();
+  });
+
+  it("a welcome notification should be called after subscribes", () => {
     const callback = vi.fn();
     notifications.subscribe(callback);
-    await notifications.send({ title: "Welcome", message: "Hello!" });
-    expect(callback).toHaveBeenCalled();
+    const note = callback.mock.calls[0][0];
+    expect(note.data.title).toBe("Welcome");
+    expect(note.data.message).toBe("You are a new subscriber");
   });
 });
