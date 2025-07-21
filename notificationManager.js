@@ -1,7 +1,7 @@
 export function createNotificationManager() {
   let notifications = [];
   let subscribers = [];
-  let config = { fetchUrl: "", updateUrl: "", createUrl: "" };
+  let config = null;
 
   async function get() {
     return notifications;
@@ -14,6 +14,7 @@ export function createNotificationManager() {
       sender: "Manuel",
       createdAt: Date.now(),
     };
+
     notifications.push(input);
     subscribers.forEach((fn) => fn(input));
     return input;
@@ -39,8 +40,8 @@ export function createNotificationManager() {
     callback(welcomeNote);
   }
 
-  async function setConfig(newConfig) {
-    config = { ...config, ...newConfig };
+  function setConfig(newConfig) {
+    config = newConfig;
     return;
   }
 
