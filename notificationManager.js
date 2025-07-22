@@ -30,14 +30,6 @@ export function createNotificationManager() {
 
   function subscribe(callback) {
     subscribers.push(callback);
-
-    const welcomeNote = {
-      data: { title: "Welcome", message: "You are a new subscriber" },
-      id: Date.now(),
-      sender: "Manuel",
-      createdAt: Date.now(),
-    };
-    callback(welcomeNote);
   }
 
   function setConfig(newConfig) {

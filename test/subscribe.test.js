@@ -8,15 +8,14 @@ describe("subscribe()", () => {
     notifications = createNotificationManager();
   });
 
-  it("subscribe accept callback and send welcome message", async () => {
+  it("subscribe accept callback and send welcome", async () => {
     const callback = vi.fn();
     const input = { title: "Welcome", message: "Hello!" };
-
     notifications.subscribe(callback);
     await notifications.send(input);
     const note = callback.mock.calls[0][0];
-    expect(note.data.title).toBe("Welcome");
-    expect(note.data.message).toBe("You are a new subscriber");
-    expect(callback).toHaveBeenCalled();
+
+    expect(note.data).toHaveProperty("title", "Welcome");
+    expect(note.data).toHaveProperty("message", "Hello!");
   });
 });
