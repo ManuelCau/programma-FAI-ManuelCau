@@ -34,7 +34,6 @@ export function createNotificationManager() {
 
   function setConfig(newConfig) {
     config = newConfig;
-    return;
   }
 
   return { get, send, subscribe, setRead, setConfig };
