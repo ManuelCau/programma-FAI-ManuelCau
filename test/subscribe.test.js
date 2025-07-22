@@ -1,5 +1,5 @@
 import { createNotificationManager } from "../notificationManager";
-import { describe, it, expect, beforeEach } from "vitest";
+import { describe, it, expect, vi, beforeEach } from "vitest";
 
 describe("subscribe()", () => {
   let notifications;
@@ -8,15 +8,14 @@ describe("subscribe()", () => {
     notifications = createNotificationManager();
   });
 
-  it("subscribe accept callback", () => {
+  it("subscribe accept callback and send welcome", async () => {
     const callback = vi.fn();
-    expect(() => notifications.subscribe(callback)).toHaveBeenCalled();
-  });
-
-  it("a callback is called after subscribes", async () => {
-    const callback = vi.fn();
+    const input = { title: "Welcome", message: "Hello!" };
     notifications.subscribe(callback);
-    await notifications.send({ title: "Welcome", message: "Hello!" });
-    expect(callback).toHaveBeenCalled();
+    await notifications.send(input);
+    const note = callback.mock.calls[0][0];
+
+    expect(note.data).toHaveProperty("title", "Welcome");
+    expect(note.data).toHaveProperty("message", "Hello!");
   });
 });

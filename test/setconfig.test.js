@@ -1,4 +1,4 @@
-import { createNotificationManager } from "../notificationManager";
+import { createNotificationManager, setConfig } from "../notificationManager";
 import { describe, it, expect, beforeEach } from "vitest";
 
 describe("setConfig", () => {
@@ -15,6 +15,6 @@ describe("setConfig", () => {
       createUrl: "https://url.to.backend.com/create",
     };
     notifications.setConfig(config);
-    expect(notifications.config).toEqual(config);
+    expect(notifications.config).toEqual(setConfig);
   });
 });
