@@ -1,8 +1,9 @@
-import { createNotificationManager, setConfig } from "../notificationManager";
+import { createNotificationManager } from "../notificationManager";
 import { describe, it, expect, beforeEach } from "vitest";
+import { NotificationManager } from "../types";
 
 describe("setConfig", () => {
-  let notifications;
+  let notifications: NotificationManager;
 
   beforeEach(() => {
     notifications = createNotificationManager();
@@ -15,6 +16,6 @@ describe("setConfig", () => {
       createUrl: "https://url.to.backend.com/create",
     };
     notifications.setConfig(config);
-    expect(notifications.config).toEqual(setConfig);
+    expect(notifications.getConfig()).toEqual(config);
   });
 });

@@ -1,11 +1,14 @@
 {
   "name": "notifica-lib",
   "version": "1.0.0",
-  "type": "module",
+  "type": "commonjs",
   "scripts": {
-    "test": "vitest"
+    "test": "vitest",
+    "demo": "tsc && node demo.js"
   },
   "devDependencies": {
+    "@types/node": "^24.0.15",
+    "typescript": "^5.8.3",
     "vitest": "^3.2.4"
   }
 }

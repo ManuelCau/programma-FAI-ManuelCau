@@ -1,8 +1,9 @@
 import { createNotificationManager } from "../notificationManager";
 import { describe, it, expect, vi, beforeEach } from "vitest";
+import { NotificationData, NotificationManager } from "../types";
 
 describe("subscribe()", () => {
-  let notifications;
+  let notifications: NotificationManager;
 
   beforeEach(() => {
     notifications = createNotificationManager();
@@ -10,7 +11,7 @@ describe("subscribe()", () => {
 
   it("subscribe accept callback and send welcome", async () => {
     const callback = vi.fn();
-    const input = { title: "Welcome", message: "Hello!" };
+    const input: NotificationData = { title: "Welcome", message: "Hello!" };
     notifications.subscribe(callback);
     await notifications.send(input);
     const note = callback.mock.calls[0][0];
