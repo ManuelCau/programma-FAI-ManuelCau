@@ -1,10 +1,10 @@
-import { createNotificationManager } from "../src/notificationManager";
+import { createNotificationManager } from "../notificationManager.js";
 import { describe, it, expect, beforeEach } from "vitest";
 import {
   Notification,
   NotificationData,
   NotificationManager,
-} from "../src/types";
+} from "../types.js";
 
 describe("setRead", () => {
   let notifications: NotificationManager;
