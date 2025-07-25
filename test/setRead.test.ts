@@ -1,6 +1,10 @@
-import { createNotificationManager } from "../notificationManager";
+import { createNotificationManager } from "../src/notificationManager";
 import { describe, it, expect, beforeEach } from "vitest";
-import { Notification, NotificationData, NotificationManager } from "../types";
+import {
+  Notification,
+  NotificationData,
+  NotificationManager,
+} from "../src/types";
 
 describe("setRead", () => {
   let notifications: NotificationManager;
@@ -11,7 +15,7 @@ describe("setRead", () => {
 
   it("setRead sets the readAt on new notifications", async () => {
     const input: NotificationData = { title: "Welcome", message: "Hello!" };
-    const notification: Notification = await notifications.send(input);
+    const notification = await notifications.send(input);
     await notifications.setRead(notification.id);
     const list = await notifications.get();
     const isUpdate = list.find((n) => n.id === notification.id);
@@ -20,7 +24,7 @@ describe("setRead", () => {
 
   it("setRead returns a numeric timestamp", async () => {
     const input: NotificationData = { title: "Welcome", message: "Hello!" };
-    const notification: Notification = await notifications.send(input);
+    const notification = await notifications.send(input);
     await notifications.setRead(notification.id);
     const list = await notifications.get();
     const isUpdate = list.find((n) => n.id === notification.id);

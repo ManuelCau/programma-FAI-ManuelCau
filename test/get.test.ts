@@ -1,6 +1,10 @@
-import { createNotificationManager } from "../notificationManager";
+import { createNotificationManager } from "../src/notificationManager";
 import { describe, it, expect, beforeEach } from "vitest";
-import { Notification, NotificationData, NotificationManager } from "../types";
+import {
+  Notification,
+  NotificationData,
+  NotificationManager,
+} from "../src/types";
 
 describe("get()", () => {
   let notifications: NotificationManager;
@@ -15,11 +19,11 @@ describe("get()", () => {
   });
 
   it("get method returns all the notifications", async () => {
-    const ntf1: Notification = await notifications.send({
+    const ntf1 = await notifications.send({
       title: "Welcome",
       message: "Hello!",
     });
-    const ntf2: Notification = await notifications.send({
+    const ntf2 = await notifications.send({
       title: "Welcome2",
       message: "Hello!2",
     });

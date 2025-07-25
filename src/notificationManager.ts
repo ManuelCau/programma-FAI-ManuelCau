@@ -3,7 +3,7 @@ import {
   NotificationData,
   NotificationManager,
   NotificationManagerConfig,
-} from "./types";
+} from "./types.js";
 
 export function createNotificationManager(): NotificationManager {
   let notifications: Notification[] = [];
@@ -38,17 +38,17 @@ export function createNotificationManager(): NotificationManager {
     return;
   }
 
-  function subscribe(callback: (notification: Notification) => void): void {
+  function subscribe(callback: (notification: Notification) => void) {
     subscribers.push(callback);
   }
 
-  function setConfig(newConfig: NotificationManagerConfig): void {
+  function setConfig(newConfig: NotificationManagerConfig) {
     config = newConfig;
   }
 
   function getConfig(): NotificationManagerConfig | null {
-  return config;
-}
+    return config;
+  }
 
   return { get, send, subscribe, getConfig, setRead, setConfig };
 }

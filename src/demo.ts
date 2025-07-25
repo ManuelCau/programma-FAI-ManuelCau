@@ -1,9 +1,9 @@
-import { createNotificationManager } from "./notificationManager";
+import { createNotificationManager } from "./notificationManager.js";
 import {
   Notification,
   NotificationData,
   NotificationManagerConfig,
-} from "./types";
+} from "./types.js";
 
 async function demo() {
   const manager = createNotificationManager();
