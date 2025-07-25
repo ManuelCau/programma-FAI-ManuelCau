@@ -3,9 +3,13 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "test": "vitest"
+    "test": "vitest",
+    "demo": "tsc && node dist/demo.js",
+    "build": "tsc"
   },
   "devDependencies": {
+    "@types/node": "^24.0.15",
+    "typescript": "^5.8.3",
     "vitest": "^3.2.4"
   }
 }

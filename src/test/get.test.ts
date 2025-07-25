@@ -1,8 +1,9 @@
-import { createNotificationManager } from "../notificationManager";
+import { createNotificationManager } from "../notificationManager.js";
 import { describe, it, expect, beforeEach } from "vitest";
+import { NotificationManager } from "../types.js";
 
 describe("get()", () => {
-  let notifications;
+  let notifications: NotificationManager;
 
   beforeEach(() => {
     notifications = createNotificationManager();

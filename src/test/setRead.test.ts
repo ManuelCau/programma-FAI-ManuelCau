@@ -1,28 +1,33 @@
-import { createNotificationManager } from "../notificationManager";
+import { createNotificationManager } from "../notificationManager.js";
 import { describe, it, expect, beforeEach } from "vitest";
+import {
+  Notification,
+  NotificationData,
+  NotificationManager,
+} from "../types.js";
 
 describe("setRead", () => {
-  let notifications;
+  let notifications: NotificationManager;
 
   beforeEach(() => {
     notifications = createNotificationManager();
   });
 
-  it("setRead set the read on new notifications", async () => {
-    const input = { title: "Welcome", message: "Hello!" };
+  it("setRead sets the readAt on new notifications", async () => {
+    const input: NotificationData = { title: "Welcome", message: "Hello!" };
     const notification = await notifications.send(input);
     await notifications.setRead(notification.id);
     const list = await notifications.get();
     const isUpdate = list.find((n) => n.id === notification.id);
-    expect(isUpdate.readAt).toBeDefined();
+    expect(isUpdate?.readAt).toBeDefined();
   });
 
-  it("setRead returns a numeric timeStamp", async () => {
-    const input = { title: "Welcome", message: "Hello!" };
+  it("setRead returns a numeric timestamp", async () => {
+    const input: NotificationData = { title: "Welcome", message: "Hello!" };
     const notification = await notifications.send(input);
     await notifications.setRead(notification.id);
     const list = await notifications.get();
     const isUpdate = list.find((n) => n.id === notification.id);
-    expect(typeof isUpdate.readAt).toBe("number");
+    expect(typeof isUpdate?.readAt).toBe("number");
   });
 });
