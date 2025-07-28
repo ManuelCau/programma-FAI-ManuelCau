@@ -1,4 +1,4 @@
-name: Notification Manager CI
+name: Code Quality checks
 
 on:
   push:
@@ -8,7 +8,7 @@ on:
 
 jobs:
   build-and-test:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
@@ -17,16 +17,13 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: "18"
+          node-version: "22"
 
       - name: Install dependencies
         run: npm install
 
-      - name: TypeScript build
-        run: npm run build
+      - name: Type Check
+        run: npm run type-check
 
       - name: Run tests
         run: npm run test
-
-      - name: Run Demo
-        run: npm run demo
