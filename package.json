@@ -5,7 +5,7 @@
   "scripts": {
     "test": "vitest",
     "demo": "tsc && node dist/demo.js",
-    "build": "tsc"
+    "type-check": "tsc --noemit"
   },
   "devDependencies": {
     "@types/node": "^24.0.15",
