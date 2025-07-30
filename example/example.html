@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Notification Manager</title>
+
+    <style>
+      body {
+        font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS",
+          sans-serif;
+        color: rgb(255, 255, 255);
+        display: flex;
+        justify-content: center;
+      }
+      .notification-manager {
+        background-color: darkslategray;
+        padding: 30px;
+        border-radius: 20px;
+      }
+      .input-box {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background-color: rgba(39, 172, 255, 0.145);
+        box-shadow: 10px 10px 10px inset rgba(57, 64, 87, 0.092);
+        padding: 30px;
+        border-radius: 10px;
+      }
+      input {
+        padding: 10px;
+        border-radius: 20px;
+        border-color: rgb(197, 197, 197);
+        width: 100%;
+        margin: 10px;
+      }
+      input:hover {
+        border-color: chocolate;
+        border-width: 3px;
+        transition: 0.3s;
+      }
+
+      button {
+        padding: 10px 30px;
+        border-radius: 20px;
+        margin-top: 20px;
+        box-shadow: 2px 5px 8px rgba(33, 38, 53, 0.699);
+      }
+      button:hover {
+        padding: 15px 40px;
+        transition: 0.5s;
+        color: white;
+        background-color: chocolate;
+        border-color: transparent;
+      }
+      .notifications-box {
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        background-color: rgba(39, 172, 255, 0.145);
+        box-shadow: 10px 10px 10px inset rgba(57, 64, 87, 0.092);
+        padding: 30px;
+        border-radius: 10px;
+        margin-top: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="notification-manager">
+      <h1>Notification Manager Example</h1>
+      <div class="input-box">
+        <h2>Send new notification</h2>
+        <input type="text" placeholder="Title" id="title-input" onchange="" />
+        <input type="text" placeholder="Message" id="msg-input" />
+        <button id="send-btn">Send</button>
+      </div>
+      <div class="notifications-box">
+        <h2 id="notes">Notifications:</h2>
+      </div>
+    </div>
+    <script type="module" src="../dist/notificationManager.js"></script>
+    <script type="module" src="./example.js"></script>
+  </body>
+</html>
