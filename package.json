@@ -5,11 +5,15 @@
   "scripts": {
     "test": "vitest",
     "demo": "tsc && node dist/demo.js",
-    "type-check": "tsc --noemit"
+    "type-check": "tsc --noemit",
+    "dev": "vite dev"
   },
   "devDependencies": {
     "@types/node": "^24.0.15",
     "typescript": "^5.8.3",
     "vitest": "^3.2.4"
+  },
+  "dependencies": {
+    "vite": "^7.0.6"
   }
 }
