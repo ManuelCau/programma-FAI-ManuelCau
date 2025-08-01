@@ -1,9 +1,12 @@
-import { createNotificationManager } from "../dist/notificationManager.js";
+import { createNotificationManager } from "../src/notificationManager.ts";
+import { Notification, NotificationManager } from "../src/types.ts";
 
-const manager = createNotificationManager();
-const notificationBox = document.querySelector(".notifications-box");
+const manager: NotificationManager = createNotificationManager();
+const notificationBox = document.querySelector(
+  ".notifications-box"
+) as HTMLDivElement;
 
-function newNotification(notification) {
+function newNotification(notification: Notification) {
   notificationBox.style.display = "flex";
 
   let ul = notificationBox.querySelector("ul");
@@ -27,7 +30,7 @@ function newNotification(notification) {
     li.appendChild(readTime);
     li.style.fontWeight = "200";
   } else {
-    const readButton = document.createElement("button");
+    const readButton = document.createElement("button") as HTMLButtonElement;
     readButton.textContent = "Mark as read";
     readButton.style.marginLeft = "10px";
     readButton.style.padding = "10px";
@@ -52,11 +55,12 @@ manager.subscribe((notification) => {
   newNotification(notification);
 });
 
-const button = document.getElementById("send-btn");
+const button = document.getElementById("send-btn") as HTMLButtonElement;
 button.addEventListener("click", async () => {
-  const title = document.getElementById("title-input").value;
-  const message = document.getElementById("msg-input").value;
-
+  const titleInput = document.getElementById("title-input") as HTMLInputElement;
+  const messageInput = document.getElementById("msg-input") as HTMLInputElement;
+  const title = titleInput.value;
+  const message = messageInput.value;
   if (!title || !message) return;
 
   await manager.send({ title, message });
