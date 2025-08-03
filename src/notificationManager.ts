@@ -3,7 +3,7 @@ import {
   NotificationData,
   NotificationManager,
   NotificationManagerConfig,
-} from "./types.js";
+} from "./types.ts";
 
 export function createNotificationManager(): NotificationManager {
   let notifications: Notification[] = [];
