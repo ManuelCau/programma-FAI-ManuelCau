@@ -1,4 +1,3 @@
-import { json } from "stream/consumers";
 import {
   Notification,
   NotificationData,
@@ -13,13 +12,19 @@ export function createNotificationManager(): NotificationManager {
 
   async function get(): Promise<Notification[]> {
     if (config?.fetchUrl) {
-      const response = await fetch(config.fetchUrl);
-      if (response.ok) {
+      try {
+        const response = await fetch(config.fetchUrl);
+        if (!response.ok) {
+          throw new Error(
+            `Data error: ${response.status} ${response.statusText}`
+          );
+        }
         const dataFetch: Notification[] = await response.json();
         notifications = dataFetch;
+      } catch (error) {
+        console.error("There are some errors on data fetch", error);
       }
     }
-
     return notifications;
   }
 
@@ -37,11 +42,20 @@ export function createNotificationManager(): NotificationManager {
     subscribers.forEach((fn) => fn(input));
 
     if (config?.createUrl) {
-      await fetch(config.createUrl, {
-        method: "POST",
-        headers: { "Content type": "application/json" },
-        body: JSON.stringify(input),
-      });
+      try {
+        const response = await fetch(config.createUrl, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },  
+          body: JSON.stringify(input),
+        });
+        if (!response.ok) {
+          throw new Error(
+            `Data send errors: ${response.status} ${response.statusText}`
+          );
+        }
+      } catch (error) {
+        console.error("Data send error", error);
+      }
     }
 
     return input;
@@ -52,11 +66,20 @@ export function createNotificationManager(): NotificationManager {
     if (note) {
       note.readAt = Date.now();
       if (config?.updateUrl) {
-        await fetch(config.updateUrl, {
-          method: "PATCH",
-          headers: { "Content type": "application/json" },
-          body: JSON.stringify({ id, read: true }),
-        });
+        try {
+          const response = await fetch(config.updateUrl, {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },  
+            body: JSON.stringify({ id, read: true }),
+          });
+          if (!response.ok) {
+            throw new Error(
+              `Data PATCH errors: ${response.status} ${response.statusText}`
+            );
+          }
+        } catch (error) {
+          console.error("Data PATCH error", error);
+        }
       }
     }
   }
