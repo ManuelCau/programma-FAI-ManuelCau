@@ -1,3 +1,4 @@
+import { json } from "stream/consumers";
 import {
   Notification,
   NotificationData,
@@ -11,6 +12,14 @@ export function createNotificationManager(): NotificationManager {
   let config: NotificationManagerConfig | null = null;
 
   async function get(): Promise<Notification[]> {
+    if (config?.fetchUrl) {
+      const response = await fetch(config.fetchUrl);
+      if (response.ok) {
+        const dataFetch: Notification[] = await response.json();
+        notifications = dataFetch;
+      }
+    }
+
     return notifications;
   }
 
@@ -21,12 +30,20 @@ export function createNotificationManager(): NotificationManager {
     const input: Notification = {
       data: { title, message },
       id: Date.now(),
-      sender: "Manuel",
       createdAt: Date.now(),
     };
 
     notifications.push(input);
     subscribers.forEach((fn) => fn(input));
+
+    if (config?.createUrl) {
+      await fetch(config.createUrl, {
+        method: "POST",
+        headers: { "Content type": "application/json" },
+        body: JSON.stringify(input),
+      });
+    }
+
     return input;
   }
 
@@ -34,8 +51,14 @@ export function createNotificationManager(): NotificationManager {
     const note = notifications.find((n) => n.id === id);
     if (note) {
       note.readAt = Date.now();
+      if (config?.updateUrl) {
+        await fetch(config.updateUrl, {
+          method: "PATCH",
+          headers: { "Content type": "application/json" },
+          body: JSON.stringify({ id, read: true }),
+        });
+      }
     }
-    return;
   }
 
   function subscribe(callback: (notification: Notification) => void) {
