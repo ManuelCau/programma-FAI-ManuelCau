@@ -6,7 +6,6 @@ export type NotificationData = {
 export type Notification = {
   data: NotificationData;
   id: number;
-  sender: string;
   readAt?: number;
   createdAt: number;
 };

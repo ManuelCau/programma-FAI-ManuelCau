@@ -11,6 +11,20 @@ export function createNotificationManager(): NotificationManager {
   let config: NotificationManagerConfig | null = null;
 
   async function get(): Promise<Notification[]> {
+    if (config?.fetchUrl) {
+      try {
+        const response = await fetch(config.fetchUrl);
+        if (!response.ok) {
+          throw new Error(
+            `Data error: ${response.status} ${response.statusText}`
+          );
+        }
+        const dataFetch: Notification[] = await response.json();
+        notifications = dataFetch;
+      } catch (error) {
+        console.error("There are some errors on data fetch", error);
+      }
+    }
     return notifications;
   }
 
@@ -21,12 +35,29 @@ export function createNotificationManager(): NotificationManager {
     const input: Notification = {
       data: { title, message },
       id: Date.now(),
-      sender: "Manuel",
       createdAt: Date.now(),
     };
 
     notifications.push(input);
     subscribers.forEach((fn) => fn(input));
+
+    if (config?.createUrl) {
+      try {
+        const response = await fetch(config.createUrl, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },  
+          body: JSON.stringify(input),
+        });
+        if (!response.ok) {
+          throw new Error(
+            `Data send errors: ${response.status} ${response.statusText}`
+          );
+        }
+      } catch (error) {
+        console.error("Data send error", error);
+      }
+    }
+
     return input;
   }
 
@@ -34,8 +65,23 @@ export function createNotificationManager(): NotificationManager {
     const note = notifications.find((n) => n.id === id);
     if (note) {
       note.readAt = Date.now();
+      if (config?.updateUrl) {
+        try {
+          const response = await fetch(config.updateUrl, {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },  
+            body: JSON.stringify({ id, read: true }),
+          });
+          if (!response.ok) {
+            throw new Error(
+              `Data PATCH errors: ${response.status} ${response.statusText}`
+            );
+          }
+        } catch (error) {
+          console.error("Data PATCH error", error);
+        }
+      }
     }
-    return;
   }
 
   function subscribe(callback: (notification: Notification) => void) {

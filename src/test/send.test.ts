@@ -1,10 +1,6 @@
 import { createNotificationManager } from "../notificationManager.js";
-import { describe, it, expect, beforeEach } from "vitest";
-import {
-  Notification,
-  NotificationData,
-  NotificationManager,
-} from "../types.js";
+import { describe, it, expect, beforeEach, vi } from "vitest";
+import { NotificationData, NotificationManager } from "../types.js";
 
 describe("send()", () => {
   let notifications: NotificationManager;
@@ -30,5 +26,24 @@ describe("send()", () => {
     const input: NotificationData = { title: "Welcome", message: "Hello!" };
     const notification = await notifications.send(input);
     expect(typeof notification.createdAt).toBe("number");
+  });
+
+  it("send method should call POST at data fetch", async () => {
+    const fetch = vi.spyOn(globalThis, "fetch").mockResolvedValue({
+      ok: true,
+      json: async () => {},
+    } as Response);
+    notifications.setConfig({
+      fetchUrl: "https://url.to.backend.com",
+      updateUrl: "https://url.to.backend.com/update",
+      createUrl: "https://url.to.backend.com/create",
+    });
+    const input: NotificationData = { title: "Welcome", message: "Hello!" };
+    await notifications.send(input);
+
+    expect(fetch).toHaveBeenCalled();
+    const [url, options] = fetch.mock.calls[0];
+    expect(options?.method).toBe("POST");
+    expect(url).toBe("https://url.to.backend.com/create");
   });
 });
