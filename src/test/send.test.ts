@@ -28,7 +28,7 @@ describe("send()", () => {
     expect(typeof notification.createdAt).toBe("number");
   });
 
-  it("send method call POST when data is fetched", async () => {
+  it("send method should call POST at data fetch", async () => {
     const fetch = vi.spyOn(globalThis, "fetch").mockResolvedValue({
       ok: true,
       json: async () => {},
