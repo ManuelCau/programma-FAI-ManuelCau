@@ -12,13 +12,13 @@ describe("NotificationManager Channels", () => {
   });
 
   afterEach(() => {
-    (globalThis as any).fetch = originalFetch;
+    globalThis.fetch = originalFetch;
     vi.restoreAllMocks();
   });
 
   it("should call specified channels on send()", async () => {
     const fetchMock = vi.fn().mockResolvedValue({ ok: true } as Response);
-    (globalThis as any).fetch = fetchMock;
+    globalThis.fetch = fetchMock;
 
     notifications.setConfig({
       fetchUrl: "",
@@ -49,7 +49,7 @@ describe("NotificationManager Channels", () => {
 
   it("should call all configured channels on POST", async () => {
     const fetchMock = vi.fn().mockResolvedValue({ ok: true } as Response);
-    (globalThis as any).fetch = fetchMock;
+    globalThis.fetch = fetchMock;
 
     notifications.setConfig({
       fetchUrl: "",
@@ -70,7 +70,7 @@ describe("NotificationManager Channels", () => {
 
   it("should not have any calls if configManager is not setted", async () => {
     const fetchMock = vi.fn().mockResolvedValue({ ok: false } as Response);
-    (globalThis as any).fetch = fetchMock;
+    globalThis.fetch = fetchMock;
     const input: SendPayload = {
       title: "Welcome",
       message: "Hello!",

@@ -18,8 +18,7 @@ export type NotificationManagerConfig = {
   updateUrl: string;
   createUrl: string;
   channels?: {
-    email: string;
-    sms: string;
+    [k: string]: string;
   };
 };
 export type SubscribeCallback = (notification: Notification) => void;
