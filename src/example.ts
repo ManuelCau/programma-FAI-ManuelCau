@@ -62,6 +62,22 @@ button.addEventListener("click", async () => {
   const title = titleInput.value;
   const message = messageInput.value;
   if (!title || !message) return;
+  const selectedChannels: string[] = [];
+  const emailCheck = document.getElementById(
+    "channel-email"
+  ) as HTMLInputElement;
+  const smsCheck = document.getElementById("channel-sms") as HTMLInputElement;
+  const inAppCheck = document.getElementById(
+    "channel-inapp"
+  ) as HTMLInputElement;
 
-  await manager.send({ title, message });
+  if (emailCheck.checked) selectedChannels.push("email");
+  if (smsCheck.checked) selectedChannels.push("sms");
+  if (inAppCheck.checked) selectedChannels.push("inapp");
+
+  await manager.send({
+    title,
+    message,
+    channels: selectedChannels.length > 0 ? selectedChannels : undefined,
+  });
 });

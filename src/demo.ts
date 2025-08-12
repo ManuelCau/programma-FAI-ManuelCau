@@ -12,6 +12,10 @@ async function demo() {
     fetchUrl: "https://url.to.backend.com",
     updateUrl: "https://url.to.backend.com/update",
     createUrl: "https://url.to.backend.com/create",
+    channels: {
+      email: "https://url.to.backend.com/email",
+      sms: "https://url.to.backend.com/sms",
+    },
   };
   manager.setConfig(config);
 

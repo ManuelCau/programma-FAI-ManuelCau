@@ -1,7 +1,6 @@
 import { createNotificationManager } from "../notificationManager.js";
 import { describe, it, expect, beforeEach, vi } from "vitest";
 import {
-  Notification,
   NotificationData,
   NotificationManager,
 } from "../types.js";

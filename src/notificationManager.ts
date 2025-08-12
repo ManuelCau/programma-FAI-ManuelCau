@@ -1,8 +1,8 @@
 import {
   Notification,
-  NotificationData,
   NotificationManager,
   NotificationManagerConfig,
+  SendPayload,
 } from "./types.ts";
 
 export function createNotificationManager(): NotificationManager {
@@ -31,7 +31,8 @@ export function createNotificationManager(): NotificationManager {
   async function send({
     title,
     message,
-  }: NotificationData): Promise<Notification> {
+    channels: sendChannels,
+  }: SendPayload): Promise<Notification> {
     const input: Notification = {
       data: { title, message },
       id: Date.now(),
@@ -41,11 +42,20 @@ export function createNotificationManager(): NotificationManager {
     notifications.push(input);
     subscribers.forEach((fn) => fn(input));
 
+    if (config?.channels) {
+      const allChannels = Object.keys(config.channels);
+      const hasChannels = sendChannels && sendChannels.length > 0;
+
+      input.channels = hasChannels
+        ? sendChannels.filter((c) => allChannels.includes(c))
+        : allChannels;
+    }
+
     if (config?.createUrl) {
       try {
         const response = await fetch(config.createUrl, {
           method: "POST",
-          headers: { "Content-Type": "application/json" },  
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify(input),
         });
         if (!response.ok) {
@@ -55,6 +65,33 @@ export function createNotificationManager(): NotificationManager {
         }
       } catch (error) {
         console.error("Data send error", error);
+      }
+    }
+
+    if (config?.channels && input.channels?.length) {
+      const channelsConfig = config.channels;
+      type ChannelsConfigType = typeof channelsConfig;
+
+      const calls = input.channels.map(async (ch) => {
+        const url = channelsConfig[ch as keyof ChannelsConfigType];
+        if (!url) return Promise.resolve();
+        const res = await fetch(url, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ channel: ch, notification: input }),
+        });
+        if (!res.ok) throw new Error(`Channel ${ch} failed: ${res.status}`);
+      });
+
+      try {
+        const results = await Promise.allSettled(calls);
+        results.forEach((r) => {
+          if (r.status === "rejected") {
+            console.error("Send error:", r.reason);
+          }
+        });
+      } catch (error) {
+        console.error("Error sending to channels", error);
       }
     }
 
@@ -69,7 +106,7 @@ export function createNotificationManager(): NotificationManager {
         try {
           const response = await fetch(config.updateUrl, {
             method: "PATCH",
-            headers: { "Content-Type": "application/json" },  
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ id, read: true }),
           });
           if (!response.ok) {

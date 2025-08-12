@@ -3,25 +3,31 @@ export type NotificationData = {
   message: string;
 };
 
+export type SendPayload = NotificationData & { channels?: string[] };
+
 export type Notification = {
   data: NotificationData;
   id: number;
   readAt?: number;
   createdAt: number;
+  channels?: string[];
 };
 
 export type NotificationManagerConfig = {
   fetchUrl: string;
   updateUrl: string;
   createUrl: string;
+  channels?: {
+    [k: string]: string;
+  };
 };
 export type SubscribeCallback = (notification: Notification) => void;
 
 export interface NotificationManager {
   get: () => Promise<Notification[]>;
-  send: (data: { title: string; message: string }) => Promise<Notification>;
+  send: (data: SendPayload) => Promise<Notification>;
   setRead: (id: number) => Promise<void>;
   subscribe: (callback: SubscribeCallback) => void;
   setConfig: (config: NotificationManagerConfig) => void;
-  getConfig(): NotificationManagerConfig| null;
+  getConfig(): NotificationManagerConfig | null;
 }
