@@ -42,16 +42,13 @@ export function createNotificationManager(): NotificationManager {
     notifications.push(input);
     subscribers.forEach((fn) => fn(input));
 
-    let channelList: string[] = [];
     if (config?.channels) {
       const allChannels = Object.keys(config.channels);
       const hasChannels = sendChannels && sendChannels.length > 0;
 
-      channelList = hasChannels
+      input.channels = hasChannels
         ? sendChannels.filter((c) => allChannels.includes(c))
         : allChannels;
-
-      input.channels = channelList;
     }
 
     if (config?.createUrl) {
@@ -71,9 +68,12 @@ export function createNotificationManager(): NotificationManager {
       }
     }
 
-    if (config?.channels && channelList.length > 0) {
-      const calls = channelList.map(async (ch) => {
-        const url = config?.channels![ch];
+    if (config?.channels && input.channels?.length) {
+      const channelsConfig = config.channels;
+      type ChannelsConfigType = typeof channelsConfig;
+
+      const calls = input.channels.map(async (ch) => {
+        const url = channelsConfig[ch as keyof ChannelsConfigType];
         if (!url) return Promise.resolve();
         const res = await fetch(url, {
           method: "POST",
