@@ -1,4 +1,4 @@
-import { createNotificationManager } from "./notificationManager.js";
+import { createNotificationManager } from "./notificationManager.ts";
 import {
   Notification,
   NotificationData,

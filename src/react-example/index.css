@@ -1,0 +1,141 @@
+* {
+  padding: 0px;
+  margin: 0px;
+}
+
+body {
+  background-image: url(./images/jakob-owens-GoRsrsoxoL8-unsplash.jpg);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  color: white;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+h2 {
+  font-size: xx-large;
+  display: flex;
+  justify-self: center;
+  margin-bottom: 30px;
+}
+.form-box {
+  margin: 100px;
+  display: flex;
+  flex-direction: column;
+  width: min-content;
+  justify-content: center;
+  justify-self: center;
+  border-radius: 40px;
+  padding: 100px;
+  background-image: linear-gradient(
+    rgba(255, 255, 255, 0.1),
+    rgba(255, 255, 255, 0.5),
+    rgba(255, 255, 255, 0.9)
+  );
+  box-shadow: rgba(0, 0, 0, 0.3) 0px 20px 8px;
+}
+.form {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-input {
+  background-color: rgba(255, 255, 255, 0.5);
+  padding: 10px;
+  border-radius: 10px;
+  margin-top: 20px;
+  border-color: transparent;
+}
+.form-input:hover {
+  border-color: white;
+}
+
+.checkbox {
+  display: flex;
+  justify-content: center;
+  margin: 10px 8px;
+}
+.check-label {
+  display: flex;
+  gap: 5px;
+  font-size: smaller;
+  font-weight: bold;
+  color: rgb(125, 125, 185);
+  padding: 5px;
+}
+
+.send-btn {
+  padding: 10px;
+  border-radius: 10px;
+  border-color: transparent;
+  background-color: coral;
+  font-size: x-large;
+  font-weight: bold;
+  color: white;
+}
+.send-btn:hover {
+  padding: 15px;
+  border-radius: 12px;
+  border-color: transparent;
+  background-color: rgb(255, 70, 3);
+  transition: 0.3s ease-in-out;
+  font-size: x-large;
+  font-weight: bold;
+  color: white;
+}
+
+.notification-box {
+  display: flex;
+  flex-direction: column;
+  margin-top: 50px;
+  color: rgb(125, 125, 185);
+  justify-content: center;
+
+  ul {
+    list-style: none;
+    padding: 10px;
+    border-radius: 30px;
+
+    li {
+      font-size: small;
+      display: flex;
+      gap: 10px;
+      flex-direction: column;
+      align-items: center;
+      padding: 10px;
+      border-radius: 30px;
+      p {
+        font-size: smaller;
+      }
+    }
+    li:hover {
+      background-color: rgba(255, 255, 255, 0.7);
+    }
+  }
+}
+.data {
+  font-style: italic;
+}
+.note-element {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  align-items: center;
+}
+
+.set-read-btn {
+  border-color: transparent;
+  background-color: coral;
+  transition: 0.3s ease-in-out;
+  color: white;
+  border-radius: 15px;
+  align-items: center;
+  padding: 3px;
+}
+
+.set-read-btn:hover {
+  background-color: rgb(255, 70, 3);
+  transition: 0.3s ease-in-out;
+  color: white;
+  border-radius: 15px;
+  font-weight: bold;
+}

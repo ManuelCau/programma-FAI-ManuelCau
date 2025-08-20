@@ -44,11 +44,11 @@ export function createNotificationManager(): NotificationManager {
 
     if (config?.channels) {
       const allChannels = Object.keys(config.channels);
-      const hasChannels = sendChannels && sendChannels.length > 0;
-
-      input.channels = hasChannels
-        ? sendChannels.filter((c) => allChannels.includes(c))
-        : allChannels;
+      if (sendChannels && sendChannels.length > 0) {
+        input.channels = sendChannels.filter((c) => allChannels.includes(c));
+      } else {
+        input.channels = [];
+      }
     }
 
     if (config?.createUrl) {
