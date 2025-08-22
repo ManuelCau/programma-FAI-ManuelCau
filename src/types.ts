@@ -27,7 +27,7 @@ export interface NotificationManager {
   get: () => Promise<Notification[]>;
   send: (data: SendPayload) => Promise<Notification>;
   setRead: (id: number) => Promise<void>;
-  subscribe: (callback: SubscribeCallback) => void;
+  subscribe: (callback: SubscribeCallback) => () => void;
   setConfig: (config: NotificationManagerConfig) => void;
   getConfig(): NotificationManagerConfig | null;
 }

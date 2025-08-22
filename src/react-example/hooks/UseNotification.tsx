@@ -6,20 +6,15 @@ import {
 } from "../../types";
 import { createNotificationManager } from "../../notificationManager";
 
+const manager = createNotificationManager();
+
 export function useNotifications(myConfig: NotificationManagerConfig) {
-  const manager = useRef(createNotificationManager()).current;
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const isInitialized = useRef(false);
 
   useEffect(() => {
     manager.setConfig(myConfig);
-    console.log("Caricamento...⚡");
     manager.get().then((initialGet) => {
-      console.log(
-        initialGet.length > 0
-          ? "Caricamento notifiche completato 🚀"
-          : "Nessuna notifica per te 🌜"
-      );
       setNotifications(initialGet);
     });
   }, [myConfig, manager]);
@@ -28,22 +23,31 @@ export function useNotifications(myConfig: NotificationManagerConfig) {
     if (isInitialized.current) return;
     isInitialized.current = true;
 
-    manager.subscribe((notif) => {
-      setNotifications((prevNote) => {
-        if (prevNote.some((n) => n.id === notif.id)) return prevNote;
-        return [...prevNote, notif];
+    const unsubscribe = manager.subscribe((notif) => {
+      setNotifications((prev) => {
+        const exists = prev.find((n) => n.id === notif.id);
+        if (exists) {
+          return prev.map((n) => {
+            if (n.id === notif.id) {
+              debugger;
+              return notif;
+            }
+            return n;
+          });
+        }
+        return [...prev, notif];
       });
     });
-  }, [manager]);
+
+    return unsubscribe;
+  }, []);
 
   const send = async (payload: SendPayload) => {
     return await manager.send(payload);
   };
+
   const setRead = async (id: number) => {
     await manager.setRead(id);
-    setNotifications((prevNote) =>
-      prevNote.map((n) => (n.id === id ? { ...n, readAt: Date.now() } : n))
-    );
   };
 
   return {

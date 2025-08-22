@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { FormEvent, useState } from "react";
 import {
   NotificationData,
   NotificationManagerConfig,
   SendPayload,
 } from "../types";
 import { useNotifications } from "./hooks/UseNotification";
+import NotificationList from "./NotificationList";
 
 const myConfig: NotificationManagerConfig = {
   fetchUrl: "https://url.to.backend.com",
@@ -16,15 +17,17 @@ const myConfig: NotificationManagerConfig = {
   },
 };
 
-export default function NotificationAppDemo() {
-  const { notifications, send, setRead } = useNotifications(myConfig);
+export function NotificationAppDemo() {
+  const { send } = useNotifications(myConfig);
   const [data, setData] = useState<NotificationData>({
     title: "",
     message: "",
   });
   const [selectedChannels, setSelectedChannels] = useState<string[]>([]);
 
-  const handleSendBtn = async () => {
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+
     if (!data.title.trim() || !data.message.trim()) return;
     const dataChannels: SendPayload = { ...data, channels: selectedChannels };
     await send(dataChannels);
@@ -33,16 +36,19 @@ export default function NotificationAppDemo() {
   };
 
   const toggleChannel = (channel: string) => {
-    setSelectedChannels((prevNote) =>
-      prevNote.includes(channel)
-        ? prevNote.filter((c) => c !== channel)
-        : [...prevNote, channel]
-    );
+    setSelectedChannels((prevNote) => {
+      const index = prevNote.findIndex((c) => c === channel);
+      if (index === -1) {
+        return [...prevNote, channel];
+      } else {
+        return [...prevNote.slice(0, index), ...prevNote.slice(index + 1)];
+      }
+    });
   };
 
   return (
     <div className="form-box">
-      <div className="form">
+      <form onSubmit={handleSubmit} className="form">
         <h2>Notifications</h2>
 
         <input
@@ -75,37 +81,14 @@ export default function NotificationAppDemo() {
           ))}
         </div>
 
-        <button onClick={handleSendBtn} className="send-btn">
+        <button type="submit" className="send-btn">
           SEND
         </button>
-      </div>
+      </form>
+
       <div className="notification-box">
-        <ul>
-          {notifications.map((n) => (
-            <li key={n.id}>
-              <div className="note-element">
-                <strong>{n.data.title}</strong>:{" "}
-                <span className="data">{n.data.message}</span>
-                {n.readAt ? (
-                  <strong> "Read! ⚡"</strong>
-                ) : (
-                  <button
-                    onClick={() => setRead(n.id)}
-                    className="set-read-btn"
-                  >
-                    Set read
-                  </button>
-                )}
-                </div>
-                {n.channels && n.channels.length > 0 ? (
-                  <p> - Channels: {n.channels.join(", ")}</p>
-                ) : (
-                  <p>- No Channel selected ❄</p>
-                )}
-              
-            </li>
-          ))}
-        </ul>
+        <NotificationList interactive={false} />
+        <NotificationList interactive />
       </div>
     </div>
   );

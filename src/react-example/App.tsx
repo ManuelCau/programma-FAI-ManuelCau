@@ -1,4 +1,5 @@
-import NotificationAppDemo from "./NotificationAppDemo";
+import { NotificationAppDemo } from "./NotificationAppDemo";
+
 export default function App() {
   return (
     <div>
