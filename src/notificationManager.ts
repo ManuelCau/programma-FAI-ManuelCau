@@ -40,15 +40,15 @@ export function createNotificationManager(): NotificationManager {
     };
 
     notifications.push(input);
-    subscribers.forEach((fn) => fn(input));
+    notify(input);
 
     if (config?.channels) {
       const allChannels = Object.keys(config.channels);
-      const hasChannels = sendChannels && sendChannels.length > 0;
-
-      input.channels = hasChannels
-        ? sendChannels.filter((c) => allChannels.includes(c))
-        : allChannels;
+      if (sendChannels && sendChannels.length > 0) {
+        input.channels = sendChannels.filter((c) => allChannels.includes(c));
+      } else {
+        input.channels = [];
+      }
     }
 
     if (config?.createUrl) {
@@ -98,6 +98,11 @@ export function createNotificationManager(): NotificationManager {
     return input;
   }
 
+  function notify(newNotification: Notification) {
+    debugger;
+    subscribers.forEach((fn) => fn(newNotification));
+  }
+
   async function setRead(id: number): Promise<void> {
     const note = notifications.find((n) => n.id === id);
     if (note) {
@@ -118,11 +123,17 @@ export function createNotificationManager(): NotificationManager {
           console.error("Data PATCH error", error);
         }
       }
+
+      notify(note);
     }
   }
 
   function subscribe(callback: (notification: Notification) => void) {
     subscribers.push(callback);
+
+    return function unsubscribe() {
+      subscribers = subscribers.filter((c) => c !== callback);
+    };
   }
 
   function setConfig(newConfig: NotificationManagerConfig) {
