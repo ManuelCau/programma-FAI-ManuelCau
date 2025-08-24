@@ -8,28 +8,33 @@ import { createNotificationManager } from "../../notificationManager";
 
 const manager = createNotificationManager();
 
-export function useNotifications(myConfig: NotificationManagerConfig) {
+const NOTIFICATION_MANAGER_CONFIG: NotificationManagerConfig = {
+  fetchUrl: "https://url.to.backend.com",
+  updateUrl: "https://url.to.backend.com/update",
+  createUrl: "https://url.to.backend.com/create",
+  channels: {
+    email: "https://url.to.backend.com/email",
+    sms: "https://url.to.backend.com/sms",
+  },
+};
+
+export function useNotifications() {
   const [notifications, setNotifications] = useState<Notification[]>([]);
-  const isInitialized = useRef(false);
 
   useEffect(() => {
-    manager.setConfig(myConfig);
+    manager.setConfig(NOTIFICATION_MANAGER_CONFIG);
     manager.get().then((initialGet) => {
       setNotifications(initialGet);
     });
-  }, [myConfig, manager]);
+  }, []);
 
   useEffect(() => {
-    if (isInitialized.current) return;
-    isInitialized.current = true;
-
     const unsubscribe = manager.subscribe((notif) => {
       setNotifications((prev) => {
         const exists = prev.find((n) => n.id === notif.id);
         if (exists) {
           return prev.map((n) => {
             if (n.id === notif.id) {
-              debugger;
               return notif;
             }
             return n;
@@ -38,7 +43,6 @@ export function useNotifications(myConfig: NotificationManagerConfig) {
         return [...prev, notif];
       });
     });
-
     return unsubscribe;
   }, []);
 
@@ -54,5 +58,6 @@ export function useNotifications(myConfig: NotificationManagerConfig) {
     notifications,
     send,
     setRead,
+    config: NOTIFICATION_MANAGER_CONFIG,
   };
 }

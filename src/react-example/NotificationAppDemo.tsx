@@ -7,18 +7,8 @@ import {
 import { useNotifications } from "./hooks/UseNotification";
 import NotificationList from "./NotificationList";
 
-const myConfig: NotificationManagerConfig = {
-  fetchUrl: "https://url.to.backend.com",
-  updateUrl: "https://url.to.backend.com/update",
-  createUrl: "https://url.to.backend.com/create",
-  channels: {
-    email: "https://url.to.backend.com/email",
-    sms: "https://url.to.backend.com/sms",
-  },
-};
-
 export function NotificationAppDemo() {
-  const { send } = useNotifications(myConfig);
+  const { send, config } = useNotifications();
   const [data, setData] = useState<NotificationData>({
     title: "",
     message: "",
@@ -36,13 +26,22 @@ export function NotificationAppDemo() {
   };
 
   const toggleChannel = (channel: string) => {
-    setSelectedChannels((prevNote) => {
-      const index = prevNote.findIndex((c) => c === channel);
-      if (index === -1) {
-        return [...prevNote, channel];
-      } else {
-        return [...prevNote.slice(0, index), ...prevNote.slice(index + 1)];
+    setSelectedChannels((channels) => {
+      const newChannels: string[] = [];
+      let hasAddedChannel = false;
+
+      for (let i = 0; i < channels.length; i++) {
+        if (channels[i] === channel) {
+          hasAddedChannel = true;
+        } else {
+          newChannels.push(channels[i]);
+        }
       }
+      if (!hasAddedChannel) {
+        newChannels.push(channel);
+      }
+
+      return newChannels;
     });
   };
 
@@ -69,7 +68,7 @@ export function NotificationAppDemo() {
         />
 
         <div className="checkbox">
-          {Object.keys(myConfig.channels || {}).map((key) => (
+          {Object.keys(config.channels || {}).map((key) => (
             <label key={key} className="check-label">
               <input
                 type="checkbox"
@@ -87,8 +86,8 @@ export function NotificationAppDemo() {
       </form>
 
       <div className="notification-box">
-        <NotificationList interactive={false} />
-        <NotificationList interactive />
+        <NotificationList />
+        <NotificationList />
       </div>
     </div>
   );

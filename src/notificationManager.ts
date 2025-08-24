@@ -132,7 +132,7 @@ export function createNotificationManager(): NotificationManager {
     subscribers.push(callback);
 
     return function unsubscribe() {
-      // subscribers = subscribers.filter((s) => s === callback);
+      subscribers = subscribers.filter((c) => c !== callback);
     };
   }
 

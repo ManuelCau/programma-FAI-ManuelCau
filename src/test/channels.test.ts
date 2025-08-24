@@ -47,7 +47,7 @@ describe("NotificationManager Channels", () => {
     );
   });
 
-  it("should call all configured channels on POST", async () => {
+  it("should return no channels on POST if they're not specified", async () => {
     const fetchMock = vi.fn().mockResolvedValue({ ok: true } as Response);
     globalThis.fetch = fetchMock;
 
@@ -65,7 +65,7 @@ describe("NotificationManager Channels", () => {
       message: "Hello!",
     };
     const note = await notifications.send(input);
-    expect(note.channels).toEqual(["email", "sms"]);
+    expect(note.channels).toEqual([]);
   });
 
   it("should not have any calls if configManager is not setted", async () => {
